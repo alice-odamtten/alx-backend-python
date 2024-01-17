@@ -5,7 +5,7 @@ from typing import Iterator
 import random
 
 
-async def async_generator() -> Iterator[float]:
+async def async_generator() -> Generator[float, None, None]:
     '''The coroutine will loop 10 times,
        each time asynchronously wait 1 second'''
 
