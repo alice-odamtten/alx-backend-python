@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 '''a coroutine that takes no arguments'''
 import asyncio
-from typing import Iterator
+from typing import Generator
 import random
 
 
