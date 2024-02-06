@@ -31,3 +31,21 @@ class TestGithubOrgClient(unittest.TestCase):
             test_url = git_org._public_repos_url
 
         self.assertEqual('url', test_url)
+
+    @patch("client.get_json")
+    def test_public_repos(self, mock_get_url):
+        '''to test get_json with public repos'''
+        mock_payload = [{'name': 'repo1'}, {'name': 'repo2'}]
+        mock_get_url.return_value = mock_payload
+
+        with patch('client.GithubOrgClient._public_repos_url',
+                   new_callable=PropertyMock) as mock_property:
+            mock_property.return_value = 'test url'
+            test_list = GithubOrgClient('random name').public_repos()
+
+        self.assertEqual(['repo1', 'repo2'], test_list)
+        mock_get_url.assert_called_once_with('test url')
+
+
+if __name__ == '__main__':
+    unittest.main()
