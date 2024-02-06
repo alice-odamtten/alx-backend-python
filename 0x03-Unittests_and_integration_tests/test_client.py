@@ -25,6 +25,7 @@ class TestGithubOrgClient(unittest.TestCase):
     def test_public_repos_url(self, mock_org):
         '''test with context'''
         git_org = GithubOrgClient('test_org_url')
+
         with patch('client.GithubOrgClient._public_repos_url',
                    new_callable=PropertyMock) as mock_property:
             mock_property.return_value = mock_org.return_value["repos_url"]
@@ -45,6 +46,16 @@ class TestGithubOrgClient(unittest.TestCase):
 
         self.assertEqual(['repo1', 'repo2'], test_list)
         mock_get_url.assert_called_once_with('test url')
+
+    @parameterized.expand([
+         ({"name": "repo1", "license": {"key": "my_license"}},
+          "my_license", True),
+         ({"name": "repo2", "license": {"key": "other_license"}},
+          "my_license", False)
+         ])
+    def test_has_license(self, repo, lincense, res):
+        '''test license'''
+        self.assertEqual(GithubOrgClient.has_license(repo, lincense), res)
 
 
 if __name__ == '__main__':
